@@ -1,0 +1,3 @@
+A classe ApplicationDBContext é responsável por permitir que você pesquise e acesse as tabelas do seu banco de dados de forma individual. 
+Ela é uma classe importante para a configuração dos relacionamentos entre as tabelas usando o modelBuilder. 
+Com o modelBuilder, você pode especificar os "inner joins" e definir como as tabelas estão relacionadas entre si.
