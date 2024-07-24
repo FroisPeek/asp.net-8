@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Stock;
+using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,11 @@ namespace api.Controllers
     public class StockController : ControllerBase   // ControllerBase é uma classe que tem metodos que podemos usar
     {
         private readonly ApplicationDBContext _context;
-        public StockController(ApplicationDBContext context)
+        private readonly IStockRepositoy _stockRepo;
+        public StockController(ApplicationDBContext context, IStockRepositoy stockRepo)
         {
             _context = context;
+            _stockRepo = stockRepo;
         }
 
         [HttpGet("getStock")]
@@ -27,7 +30,7 @@ namespace api.Controllers
             var response = new Response<IEnumerable<StockDto>>(); // classe criada para padronizar as respostas
             try
             {
-                var stocks = await _context.Stock.ToListAsync();
+                var stocks = await _stockRepo.GetAllAsync(); // estamos chamando o metodo GetAllAsync da interface IStockRepositoy
 
                 if (stocks.Count == 0)
                 {
