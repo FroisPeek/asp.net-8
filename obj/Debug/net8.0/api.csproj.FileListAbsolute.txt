@@ -136,3 +136,4 @@ C:\Users\User\Projetos Pessoais\estudos\dotnet\api\bin\Debug\net8.0\tr\Microsoft
 C:\Users\User\Projetos Pessoais\estudos\dotnet\api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\User\Projetos Pessoais\estudos\dotnet\api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\User\Projetos Pessoais\estudos\dotnet\api\bin\Debug\net8.0\System.Text.Json.dll
+C:\Users\User\Projetos Pessoais\estudos\dotnet\api\obj\Debug\net8.0\api.sourcelink.json
