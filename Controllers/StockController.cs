@@ -61,7 +61,7 @@ namespace api.Controllers
             {
                 // FirstOrDefault -> estamos fazendo uma busca de dados na tabela Stock, no qual vai retornar o primeiro resultado que encontrar.
 
-                var stock = await _context.Stock.FindAsync(stockId); // Usar o FindAsync para buscar diretamente esse ID
+                var stock = await _stockRepo.GetByIdAsync(stockId); // Usar o FindAsync para buscar diretamente esse ID
 
                 if (stock == null)
                 {
@@ -91,8 +91,7 @@ namespace api.Controllers
             try
             {
                 var stockModel = stockDto.CreateStockDto();
-                await _context.Stock.AddAsync(stockModel);
-                await _context.SaveChangesAsync();
+                await _stockRepo.CreateAsync(stockModel);
 
                 response.Data = stockModel.ReadToStockDto();
                 response.Success = true;
@@ -113,21 +112,12 @@ namespace api.Controllers
             var response = new Response<UpdateStock>();
             try
             {
-                var stockModel = await _context.Stock.FirstOrDefaultAsync(s => s.Id == id); // estamos buscando o id na tabela Stock
+                var stockModel = await _stockRepo.UpdateAync(id, upDateDto); // estamos buscando o id na tabela Stock
 
                 if (stockModel == null)
                 {
                     return NotFound();
                 }
-
-                stockModel.Symbol = upDateDto.Symbol;
-                stockModel.CompanyName = upDateDto.CompanyName;
-                stockModel.Purchase = upDateDto.Purchase;
-                stockModel.LastDiv = upDateDto.LastDiv;
-                stockModel.Industry = upDateDto.Industry;
-                stockModel.MarketCap = upDateDto.MarketCap;
-
-                await _context.SaveChangesAsync(); // alterações sendo salvas
 
                 response.Data = upDateDto;
                 response.Message = "Stock atualizado com sucesso";
@@ -148,17 +138,13 @@ namespace api.Controllers
             var response = new Response<StockDto>();
             try
             {
-                var stockModel = await _context.Stock.FirstOrDefaultAsync(s => s.Id == id); // estamos buscando o id na tabela Stock
+                var stockModel = await _stockRepo.DeleteAsync(id); // estamos buscando o id na tabela Stock
 
                 if (stockModel == null)
                 {
                     response.Message = "Stock não encontrado";
                     return NotFound();
                 }
-
-                _context.Stock.Remove(stockModel); // estamos removendo o stockModel da tabela Stock
-                _context.Comment.RemoveRange(_context.Comment.Where(c => c.StockId == id)); // estamos removendo os comentarios que tem o id do stockModel  
-                await _context.SaveChangesAsync(); // alterações sendo salvas
 
                 response.Success = true;
                 response.Message = "Stock deletado com sucesso";
