@@ -40,5 +40,32 @@ namespace api.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("getCommentById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var response = new Response<CommentDto>();
+            try
+            {
+                var comment = await _commentRepo.GetByIdAsync(id);
+                if (comment == null)
+                {
+                    response.Success = false;
+                    response.Message = "Comment não encontrado";
+                    return NotFound();
+                }
+
+                response.Data = comment.ToReadCommentDto();
+                response.Success = true;
+                response.Message = "Comment encontrado com sucesso";
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                response.Success = false;
+                response.Message = e.Message;
+                return NotFound();
+            }
+        }
     }
 }
