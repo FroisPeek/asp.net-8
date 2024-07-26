@@ -1,4 +1,0 @@
-Os Dtos são muito importantes para 'filtra' os dados que queremos receber ou enviar.
-Imagine que você quer pesquisar um usuario no banco de dados e isso te retorna várias e várias informações importantes
-como senha, cpf e dentre outros. Porém essas informações não devem aparecer em nosso front então fazemos um dto para 
-que retorne apenas o nome do usuario por exemplo.
