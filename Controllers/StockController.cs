@@ -53,7 +53,7 @@ namespace api.Controllers
 
         }
 
-        [HttpGet("getStockById/{stockId}")]
+        [HttpGet("getStockById/{stockId:int}")]
         public async Task<IActionResult> GetStockById([FromRoute] int stockId) // estamos pegando o id da rota
         {
             var response = new Response<StockDto>();
@@ -106,7 +106,7 @@ namespace api.Controllers
             }
         }
 
-        [HttpPut("updateStock/{id}")]
+        [HttpPut("updateStock/{id:int}")]
         public async Task<IActionResult> UpDate([FromRoute] int id, [FromBody] UpdateStock upDateDto)
         {
             var response = new Response<UpdateStock>();
@@ -132,7 +132,7 @@ namespace api.Controllers
             }
         }
 
-        [HttpDelete("deleteStock/{id}")]
+        [HttpDelete("deleteStock/{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var response = new Response<StockDto>();
