@@ -23,6 +23,16 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 });
+
+builder.Services.AddCors(cors =>
+{
+    cors.AddPolicy("public", corsOption =>
+    {
+        corsOption.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+// setando o cors para publico assim posso ter acesso das infos da api em qualquer ambiente.
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,5 +45,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.UseCors("public"); // setando o cors.
 
 app.Run();

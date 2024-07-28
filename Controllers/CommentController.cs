@@ -11,7 +11,7 @@ using api.Mappers;
 
 namespace api.Controllers
 {
-    [Route("api/comment")]
+    [Route("api/comment/getComment")]
     [ApiController]
     public class CommentController : ControllerBase
     {
