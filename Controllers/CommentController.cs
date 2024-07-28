@@ -128,5 +128,34 @@ namespace api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteComment([FromRoute] int id)
+        {
+            var response = new Response<CommentDto>();
+            try
+            {
+                var comment = await _commentRepo.DeleteAsync(id);
+
+                if (comment == null)
+                {
+                    response.Success = false;
+                    response.Message = "Comment não encontrado";
+                    return NotFound();
+                }
+
+                response.Data = comment.ToReadCommentDto();
+                response.Success = true;
+                response.Message = "Comment deletado com sucesso";
+                return Ok(response);
+
+            }
+            catch (Exception e)
+            {
+                response.Success = false;
+                response.Message = e.Message;
+                return BadRequest();
+            }
+        }
     }
 }
