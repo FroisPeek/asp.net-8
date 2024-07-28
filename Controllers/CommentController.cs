@@ -16,9 +16,11 @@ namespace api.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ICommentRepository _commentRepo;
-        public CommentController(ICommentRepository commentRepo)
+        private readonly IStockRepositoy _stockRepo;
+        public CommentController(ICommentRepository commentRepo, IStockRepositoy stockRepo)
         {
             _commentRepo = commentRepo;
+            _stockRepo = stockRepo;
         }
 
         [HttpGet]
@@ -68,5 +70,63 @@ namespace api.Controllers
             }
         }
 
+        [HttpPost("{stockId}")]
+        public async Task<IActionResult> CreateComment([FromRoute] int stockId, CreateCommentDto commentDto)
+        {
+            var response = new Response<CommentDto>();
+            try
+            {
+                if (!await _stockRepo.StockExists(stockId))
+                {
+                    response.Success = false;
+                    response.Message = "Nenhum stock encontrado";
+                    return NotFound();
+                }
+
+                var commentModel = commentDto.ToCreateCommentDto(stockId);
+                await _commentRepo.CreateAsync(commentModel);
+
+                response.Data = commentModel.ToReadCommentDto();
+                response.Success = true;
+                response.Message = "Comment criado com sucesso";
+                return Ok(response);
+
+            }
+            catch (Exception e)
+            {
+                response.Success = false;
+                response.Message = e.Message;
+                return BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> EditComment([FromRoute] int id, [FromBody] UpDateCoomentDto upDateComment)
+        {
+            var response = new Response<CommentDto>();
+            try
+            {
+                var comment = await _commentRepo.UpDateAsync(id, upDateComment.ToUpDateCommentDto());
+                if (comment == null)
+                {
+                    response.Success = false;
+                    response.Message = "Comment não encontrado";
+                    return NotFound();
+                }
+
+                response.Data = comment.ToReadCommentDto();
+                response.Success = true;
+                response.Message = "Comment atualizado com sucesso";
+                return Ok(response);
+
+            }
+            catch (Exception e)
+            {
+                response.Success = false;
+                response.Message = e.Message;
+                return BadRequest();
+            }
+        }
     }
 }
