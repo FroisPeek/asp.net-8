@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Stock;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -71,5 +72,6 @@ namespace api.Repository
         {
             return _context.Stock.AnyAsync(s => s.Id == stockId); // Any ==> return true or false 
         }
+
     }
 }

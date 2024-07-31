@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Stock;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -31,13 +32,6 @@ namespace api.Controllers
             try
             {
                 var stocks = await _stockRepo.GetAllAsync(); // estamos chamando o metodo GetAllAsync da interface IStockRepositoy
-
-                if (stocks.Count == 0)
-                {
-                    response.Success = false;
-                    response.Message = "Nenhum dado encontrado";
-                    return NotFound(response);
-                }
 
                 response.Data = stocks.Select(s => s.ReadToStockDto()); // momento em que usamos nosso dto
                 response.Success = true;
@@ -155,6 +149,42 @@ namespace api.Controllers
                 response.Success = false;
                 response.Message = e.Message;
                 return BadRequest(response);
+            }
+        }
+
+        [HttpGet("searchStock")]
+        public async Task<IActionResult> search([FromQuery] QueryObject query)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var response = new Response<IEnumerable<StockDto>>();
+            try
+            {
+                var stock = _context.Stock.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(query.Symbol))
+                {
+                    stock = stock.Where(s => s.Symbol.Contains(query.Symbol));
+                }
+
+                if (!string.IsNullOrWhiteSpace(query.CompanyName))
+                {
+                    stock = stock.Where(s => s.CompanyName.Contains(query.CompanyName));
+                }
+
+                var stockFinal = await stock.ToListAsync();
+
+                response.Data = stockFinal.Select(s => s.ReadToStockDto());
+                response.Success = true;
+                response.Message = "Stock encontrado com sucesso";
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                response.Success = false;
+                response.Message = e.Message;
+                return BadRequest();
             }
         }
     }

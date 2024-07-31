@@ -1,5 +1,0 @@
-Dentro da pasta Models, geralmente encontramos arquivos que representam tabelas do banco de dados. 
-Por exemplo, nosso modelo "Stock" é uma cópia exata da tabela no SQL. 
-Dentro do modelo, podemos configurar um "inner join" ou "include" para fazer a ligação entre duas tabelas desejadas. 
-Depois disso, basta configurar no nosso ApplicationDBContext.Dentro da pasta Models, 
-geralmente encontramos arquivos que representam tabelas do banco de dados. 
